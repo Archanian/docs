@@ -20,6 +20,10 @@
       "name": "ActivityEvents"
     },
     {
+      "name": "Statistics",
+      "description": "Statistics endpoints"
+    },
+    {
       "name": "API Credentials"
     },
     {
@@ -33,71 +37,62 @@
     },
     {
       "name": "Domains"
+    },
+    {
+      "name": "Sending"
     }
   ],
   "paths": {
     "/activity/events": {
       "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "in": "query",
             "name": "channelId",
-            "required": false
-          },
-          {
             "schema": {
               "type": "string",
               "format": "uuid"
             },
             "in": "query",
+            "required": false
+          },
+          {
             "name": "after",
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
             "required": false
           },
           {
-            "schema": {
-              "anyOf": [
-                {
-                  "format": "date-time",
-                  "type": "string"
-                },
-                {
-                  "format": "date",
-                  "type": "string"
-                }
-              ]
-            },
-            "in": "query",
             "name": "startDate",
-            "required": false
-          },
-          {
             "schema": {
-              "anyOf": [
-                {
-                  "format": "date-time",
-                  "type": "string"
-                },
-                {
-                  "format": "date",
-                  "type": "string"
-                }
-              ]
+              "type": "string",
+              "format": "date-time"
             },
             "in": "query",
-            "name": "endDate",
             "required": false
           },
           {
+            "name": "endDate",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "in": "query",
+            "required": false
+          },
+          {
+            "name": "limit",
             "schema": {
               "maximum": 500,
               "type": "integer"
             },
             "in": "query",
-            "name": "limit",
             "required": false
           }
         ],
@@ -107,7 +102,158 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiCredentialResponseWithKey"
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "messageId": {
+                            "format": "uuid",
+                            "type": "string"
+                          },
+                          "channelId": {
+                            "format": "uuid",
+                            "type": "string"
+                          },
+                          "mailType": {
+                            "type": "string",
+                            "enum": [
+                              "transactional",
+                              "broadcast"
+                            ]
+                          },
+                          "mailSource": {
+                            "type": "string",
+                            "enum": [
+                              "smtp",
+                              "api"
+                            ]
+                          },
+                          "eventType": {
+                            "type": "string",
+                            "enum": [
+                              "accepted",
+                              "processed",
+                              "delivered",
+                              "bounced",
+                              "opened",
+                              "clicked",
+                              "reported_spam",
+                              "subscription_changed"
+                            ]
+                          },
+                          "timestamp": {
+                            "format": "date-time",
+                            "type": "string"
+                          },
+                          "subject": {
+                            "type": "string"
+                          },
+                          "recipients": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "after": {
+                      "type": "string"
+                    },
+                    "totalCount": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "results",
+                    "totalCount"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "integer"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "instance": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "integer"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "instance": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "field": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -122,7 +268,1578 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nopts = {\n  channel_id: \"38400000-8cf0-11bd-b23e-10b96e4ef00d\",\n  after: \"38400000-8cf0-11bd-b23e-10b96e4ef00d\",\n  start_date: Helo::ActivityEventsListStartDateParameter.new,\n  end_date: Helo::ActivityEventsListStartDateParameter.new,\n  limit: 56\n}\nHelo::ActivityEvents.list(opts)"
+            "source": {
+              "$ref": "/tmp/samples/activityEvents_list.ruby"
+            }
+          }
+        ]
+      }
+    },
+    "/activity/statistics/hourly": {
+      "get": {
+        "parameters": [
+          {
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "Date"
+                },
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                }
+              ]
+            },
+            "in": "query",
+            "name": "from",
+            "required": true
+          },
+          {
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "Date"
+                },
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                }
+              ]
+            },
+            "in": "query",
+            "name": "to",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "in": "query",
+            "name": "channelId",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "tag",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "items": {
+              "type": "object",
+              "properties": {
+                "timestamp": {
+                  "anyOf": [
+                    {
+                      "type": "Date"
+                    },
+                    {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    {
+                      "format": "date",
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ]
+                },
+                "transactional": {
+                  "type": "object",
+                  "properties": {
+                    "accepted": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "processed": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "delivered": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "opened": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "clicked": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "bounced": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "unsubscribed": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "complained": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "accepted",
+                    "processed",
+                    "delivered",
+                    "opened",
+                    "clicked",
+                    "bounced",
+                    "unsubscribed",
+                    "complained"
+                  ]
+                },
+                "broadcast": {
+                  "type": "object",
+                  "properties": {
+                    "accepted": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "processed": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "delivered": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "opened": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "clicked": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "bounced": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "unsubscribed": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "complained": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "accepted",
+                    "processed",
+                    "delivered",
+                    "opened",
+                    "clicked",
+                    "bounced",
+                    "unsubscribed",
+                    "complained"
+                  ]
+                }
+              },
+              "required": [
+                "timestamp",
+                "transactional",
+                "broadcast"
+              ]
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "timestamp": {
+                        "anyOf": [
+                          {
+                            "type": "Date"
+                          },
+                          {
+                            "format": "date-time",
+                            "type": "string"
+                          },
+                          {
+                            "format": "date",
+                            "type": "string"
+                          },
+                          {
+                            "type": "number"
+                          }
+                        ]
+                      },
+                      "transactional": {
+                        "type": "object",
+                        "properties": {
+                          "accepted": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "processed": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "delivered": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "opened": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "clicked": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "bounced": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "unsubscribed": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "complained": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "accepted",
+                          "processed",
+                          "delivered",
+                          "opened",
+                          "clicked",
+                          "bounced",
+                          "unsubscribed",
+                          "complained"
+                        ]
+                      },
+                      "broadcast": {
+                        "type": "object",
+                        "properties": {
+                          "accepted": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "processed": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "delivered": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "opened": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "clicked": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "bounced": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "unsubscribed": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "complained": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "accepted",
+                          "processed",
+                          "delivered",
+                          "opened",
+                          "clicked",
+                          "bounced",
+                          "unsubscribed",
+                          "complained"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "timestamp",
+                      "transactional",
+                      "broadcast"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "statistics_retrieveHourly",
+        "tags": [
+          "Statistics"
+        ],
+        "detail": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ]
+        },
+        "x-codeSampleId": "statistics_retrieveHourly",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": {
+              "$ref": "/tmp/samples/statistics_retrieveHourly.ruby"
+            }
+          }
+        ]
+      }
+    },
+    "/activity/statistics/daily": {
+      "get": {
+        "parameters": [
+          {
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "Date"
+                },
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                }
+              ]
+            },
+            "in": "query",
+            "name": "from",
+            "required": true
+          },
+          {
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "Date"
+                },
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                }
+              ]
+            },
+            "in": "query",
+            "name": "to",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "timezone",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "in": "query",
+            "name": "channelId",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "tag",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "items": {
+              "type": "object",
+              "properties": {
+                "timestamp": {
+                  "anyOf": [
+                    {
+                      "type": "Date"
+                    },
+                    {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    {
+                      "format": "date",
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ]
+                },
+                "transactional": {
+                  "type": "object",
+                  "properties": {
+                    "accepted": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "processed": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "delivered": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "opened": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "clicked": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "bounced": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "unsubscribed": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "complained": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "accepted",
+                    "processed",
+                    "delivered",
+                    "opened",
+                    "clicked",
+                    "bounced",
+                    "unsubscribed",
+                    "complained"
+                  ]
+                },
+                "broadcast": {
+                  "type": "object",
+                  "properties": {
+                    "accepted": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "processed": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "delivered": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "opened": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "clicked": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "bounced": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "unsubscribed": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "complained": {
+                      "anyOf": [
+                        {
+                          "format": "integer",
+                          "default": 0,
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "accepted",
+                    "processed",
+                    "delivered",
+                    "opened",
+                    "clicked",
+                    "bounced",
+                    "unsubscribed",
+                    "complained"
+                  ]
+                }
+              },
+              "required": [
+                "timestamp",
+                "transactional",
+                "broadcast"
+              ]
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "timestamp": {
+                        "anyOf": [
+                          {
+                            "type": "Date"
+                          },
+                          {
+                            "format": "date-time",
+                            "type": "string"
+                          },
+                          {
+                            "format": "date",
+                            "type": "string"
+                          },
+                          {
+                            "type": "number"
+                          }
+                        ]
+                      },
+                      "transactional": {
+                        "type": "object",
+                        "properties": {
+                          "accepted": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "processed": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "delivered": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "opened": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "clicked": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "bounced": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "unsubscribed": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "complained": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "accepted",
+                          "processed",
+                          "delivered",
+                          "opened",
+                          "clicked",
+                          "bounced",
+                          "unsubscribed",
+                          "complained"
+                        ]
+                      },
+                      "broadcast": {
+                        "type": "object",
+                        "properties": {
+                          "accepted": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "processed": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "delivered": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "opened": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "clicked": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "bounced": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "unsubscribed": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          },
+                          "complained": {
+                            "anyOf": [
+                              {
+                                "format": "integer",
+                                "default": 0,
+                                "type": "string"
+                              },
+                              {
+                                "type": "integer"
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "accepted",
+                          "processed",
+                          "delivered",
+                          "opened",
+                          "clicked",
+                          "bounced",
+                          "unsubscribed",
+                          "complained"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "timestamp",
+                      "transactional",
+                      "broadcast"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "statistics_retrieveDaily",
+        "tags": [
+          "Statistics"
+        ],
+        "detail": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ]
+        },
+        "x-codeSampleId": "statistics_retrieveDaily",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": {
+              "$ref": "/tmp/samples/statistics_retrieveDaily.ruby"
+            }
+          }
+        ]
+      }
+    },
+    "/activity/statistics/totals": {
+      "get": {
+        "parameters": [
+          {
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "Date"
+                },
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                }
+              ]
+            },
+            "in": "query",
+            "name": "from",
+            "required": true
+          },
+          {
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "Date"
+                },
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                }
+              ]
+            },
+            "in": "query",
+            "name": "to",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "channelId",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "tag",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "transactional": {
+                      "type": "object",
+                      "properties": {
+                        "accepted": {
+                          "anyOf": [
+                            {
+                              "format": "integer",
+                              "default": 0,
+                              "type": "string"
+                            },
+                            {
+                              "type": "integer"
+                            }
+                          ]
+                        },
+                        "processed": {
+                          "anyOf": [
+                            {
+                              "format": "integer",
+                              "default": 0,
+                              "type": "string"
+                            },
+                            {
+                              "type": "integer"
+                            }
+                          ]
+                        },
+                        "delivered": {
+                          "anyOf": [
+                            {
+                              "format": "integer",
+                              "default": 0,
+                              "type": "string"
+                            },
+                            {
+                              "type": "integer"
+                            }
+                          ]
+                        },
+                        "opened": {
+                          "anyOf": [
+                            {
+                              "format": "integer",
+                              "default": 0,
+                              "type": "string"
+                            },
+                            {
+                              "type": "integer"
+                            }
+                          ]
+                        },
+                        "clicked": {
+                          "anyOf": [
+                            {
+                              "format": "integer",
+                              "default": 0,
+                              "type": "string"
+                            },
+                            {
+                              "type": "integer"
+                            }
+                          ]
+                        },
+                        "bounced": {
+                          "anyOf": [
+                            {
+                              "format": "integer",
+                              "default": 0,
+                              "type": "string"
+                            },
+                            {
+                              "type": "integer"
+                            }
+                          ]
+                        },
+                        "unsubscribed": {
+                          "anyOf": [
+                            {
+                              "format": "integer",
+                              "default": 0,
+                              "type": "string"
+                            },
+                            {
+                              "type": "integer"
+                            }
+                          ]
+                        },
+                        "complained": {
+                          "anyOf": [
+                            {
+                              "format": "integer",
+                              "default": 0,
+                              "type": "string"
+                            },
+                            {
+                              "type": "integer"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "accepted",
+                        "processed",
+                        "delivered",
+                        "opened",
+                        "clicked",
+                        "bounced",
+                        "unsubscribed",
+                        "complained"
+                      ]
+                    },
+                    "broadcast": {
+                      "type": "object",
+                      "properties": {
+                        "accepted": {
+                          "anyOf": [
+                            {
+                              "format": "integer",
+                              "default": 0,
+                              "type": "string"
+                            },
+                            {
+                              "type": "integer"
+                            }
+                          ]
+                        },
+                        "processed": {
+                          "anyOf": [
+                            {
+                              "format": "integer",
+                              "default": 0,
+                              "type": "string"
+                            },
+                            {
+                              "type": "integer"
+                            }
+                          ]
+                        },
+                        "delivered": {
+                          "anyOf": [
+                            {
+                              "format": "integer",
+                              "default": 0,
+                              "type": "string"
+                            },
+                            {
+                              "type": "integer"
+                            }
+                          ]
+                        },
+                        "opened": {
+                          "anyOf": [
+                            {
+                              "format": "integer",
+                              "default": 0,
+                              "type": "string"
+                            },
+                            {
+                              "type": "integer"
+                            }
+                          ]
+                        },
+                        "clicked": {
+                          "anyOf": [
+                            {
+                              "format": "integer",
+                              "default": 0,
+                              "type": "string"
+                            },
+                            {
+                              "type": "integer"
+                            }
+                          ]
+                        },
+                        "bounced": {
+                          "anyOf": [
+                            {
+                              "format": "integer",
+                              "default": 0,
+                              "type": "string"
+                            },
+                            {
+                              "type": "integer"
+                            }
+                          ]
+                        },
+                        "unsubscribed": {
+                          "anyOf": [
+                            {
+                              "format": "integer",
+                              "default": 0,
+                              "type": "string"
+                            },
+                            {
+                              "type": "integer"
+                            }
+                          ]
+                        },
+                        "complained": {
+                          "anyOf": [
+                            {
+                              "format": "integer",
+                              "default": 0,
+                              "type": "string"
+                            },
+                            {
+                              "type": "integer"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "accepted",
+                        "processed",
+                        "delivered",
+                        "opened",
+                        "clicked",
+                        "bounced",
+                        "unsubscribed",
+                        "complained"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "transactional",
+                    "broadcast"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "statistics_retrieveTotals",
+        "tags": [
+          "Statistics"
+        ],
+        "detail": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ]
+        },
+        "x-codeSampleId": "statistics_retrieveTotals",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": {
+              "$ref": "/tmp/samples/statistics_retrieveTotals.ruby"
+            }
           }
         ]
       }
@@ -193,7 +1910,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\ngenerate_api_credential_request = Helo::GenerateApiCredentialRequest.new\nHelo::APICredentials.create(generate_api_credential_request)"
+            "source": {
+              "$ref": "/tmp/samples/apiCredential_create.ruby"
+            }
           }
         ]
       },
@@ -285,7 +2004,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nopts = {\n  channel_id: \"38400000-8cf0-11bd-b23e-10b96e4ef00d\",\n  name: \"name_example\",\n  limit: 56,\n  offset: 56\n}\nHelo::APICredentials.list(opts)"
+            "source": {
+              "$ref": "/tmp/samples/apiCredential_list.ruby"
+            }
           }
         ]
       }
@@ -367,7 +2088,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nupdate_api_credential_request = Helo::UpdateApiCredentialRequest.new\nHelo::APICredentials.update(id, update_api_credential_request)"
+            "source": {
+              "$ref": "/tmp/samples/apiCredential_update.ruby"
+            }
           }
         ]
       },
@@ -437,7 +2160,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::APICredentials.retrieve(id)"
+            "source": {
+              "$ref": "/tmp/samples/apiCredential_retrieve.ruby"
+            }
           }
         ]
       },
@@ -500,7 +2225,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::APICredentials.delete(id)"
+            "source": {
+              "$ref": "/tmp/samples/apiCredential_delete.ruby"
+            }
           }
         ]
       }
@@ -571,7 +2298,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\ncreate_user_request = Helo::CreateUserRequest.new\nHelo::Users.create(create_user_request)"
+            "source": {
+              "$ref": "/tmp/samples/user_create.ruby"
+            }
           }
         ]
       },
@@ -669,7 +2398,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nopts = {\n  limit: 56,\n  offset: 56,\n  name: \"name_example\",\n  email: \"email_example\",\n  role: \"role_example\"\n}\nHelo::Users.list(opts)"
+            "source": {
+              "$ref": "/tmp/samples/user_list.ruby"
+            }
           }
         ]
       }
@@ -751,7 +2482,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nupdate_user_request = Helo::UpdateUserRequest.new\nHelo::Users.update(id, update_user_request)"
+            "source": {
+              "$ref": "/tmp/samples/user_update.ruby"
+            }
           }
         ]
       },
@@ -821,7 +2554,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::Users.retrieve(id)"
+            "source": {
+              "$ref": "/tmp/samples/user_retrieve.ruby"
+            }
           }
         ]
       },
@@ -884,7 +2619,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::Users.delete(id)"
+            "source": {
+              "$ref": "/tmp/samples/user_delete.ruby"
+            }
           }
         ]
       }
@@ -966,7 +2703,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nchannel_id = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\ncreate_smtp_user_request = Helo::CreateSmtpUserRequest.new\nHelo::SMTPUsers.create(channel_id, create_smtp_user_request)"
+            "source": {
+              "$ref": "/tmp/samples/smtpUser_create.ruby"
+            }
           }
         ]
       },
@@ -1059,7 +2798,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nchannel_id = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nopts = {\n  limit: 56,\n  offset: 56,\n  name: \"name_example\"\n}\nHelo::SMTPUsers.list(channel_id, opts)"
+            "source": {
+              "$ref": "/tmp/samples/smtpUser_list.ruby"
+            }
           }
         ]
       }
@@ -1150,7 +2891,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nchannel_id = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nsmtp_user_update_request = Helo::SmtpUserUpdateRequest.new\nHelo::SMTPUsers.update(id, channel_id, smtp_user_update_request)"
+            "source": {
+              "$ref": "/tmp/samples/smtpUser_update.ruby"
+            }
           }
         ]
       },
@@ -1229,7 +2972,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nchannel_id = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::SMTPUsers.retrieve(id, channel_id)"
+            "source": {
+              "$ref": "/tmp/samples/smtpUser_retrieve.ruby"
+            }
           }
         ]
       },
@@ -1301,7 +3046,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nchannel_id = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::SMTPUsers.delete(id, channel_id)"
+            "source": {
+              "$ref": "/tmp/samples/smtpUser_delete.ruby"
+            }
           }
         ]
       }
@@ -1373,7 +3120,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\ncreate_channel_request = Helo::CreateChannelRequest.new({ name: \"name_example\", delivery_type: Helo::DeliveryType::LIVE })\nHelo::Channels.create(create_channel_request)"
+            "source": {
+              "$ref": "/tmp/samples/channel_create.ruby"
+            }
           }
         ]
       },
@@ -1423,12 +3172,7 @@
             "name": "deliveryType",
             "in": "query",
             "schema": {
-              "enum": [
-                "live",
-                "blackhole",
-                "routed",
-                null
-              ]
+              "$ref": "#/components/schemas/NullableOfDeliveryType"
             }
           }
         ],
@@ -1482,7 +3226,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nopts = {\n  limit: 56,\n  offset: 56,\n  name: \"name_example\",\n  channel_ids: [ \"inner_example\" ],\n  delivery_type: \"live\"\n}\nHelo::Channels.list(opts)"
+            "source": {
+              "$ref": "/tmp/samples/channel_list.ruby"
+            }
           }
         ]
       }
@@ -1575,7 +3321,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nupdate_channel_request = Helo::UpdateChannelRequest.new\nHelo::Channels.update(id, update_channel_request)"
+            "source": {
+              "$ref": "/tmp/samples/channel_update.ruby"
+            }
           }
         ]
       },
@@ -1646,7 +3394,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::Channels.retrieve(id)"
+            "source": {
+              "$ref": "/tmp/samples/channel_retrieve.ruby"
+            }
           }
         ]
       },
@@ -1710,7 +3460,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::Channels.delete(id)"
+            "source": {
+              "$ref": "/tmp/samples/channel_delete.ruby"
+            }
           }
         ]
       }
@@ -1720,20 +3472,11 @@
         "tags": [
           "Domains"
         ],
+        "description": "Create a new Domain.",
         "operationId": "domain_create",
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateDomainRequest"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateDomainRequest"
-              }
-            },
-            "application/*+json": {
               "schema": {
                 "$ref": "#/components/schemas/CreateDomainRequest"
               }
@@ -1745,19 +3488,19 @@
           "200": {
             "description": "OK",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/DomainWithDnsResponse"
-                }
-              },
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DomainWithDnsResponse"
                 }
-              },
-              "text/json": {
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DomainWithDnsResponse"
+                  "$ref": "#/components/schemas/ErrorResponse2"
                 }
               }
             }
@@ -1768,7 +3511,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\ncreate_domain_request = Helo::CreateDomainRequest.new\nHelo::Domains.create(create_domain_request)"
+            "source": {
+              "$ref": "/tmp/samples/domain_create.ruby"
+            }
           }
         ]
       },
@@ -1776,6 +3521,7 @@
         "tags": [
           "Domains"
         ],
+        "description": "Fetch a list of Domains.",
         "operationId": "domain_list",
         "parameters": [
           {
@@ -1783,8 +3529,7 @@
             "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int32",
-              "default": 20
+              "format": "int32"
             }
           },
           {
@@ -1792,28 +3537,46 @@
             "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int32",
-              "default": 0
+              "format": "int32"
             }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "channelIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            "explode": false
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaginatedResponseOfDomainResponse"
-                }
-              },
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PaginatedResponseOfDomainResponse"
                 }
-              },
-              "text/json": {
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaginatedResponseOfDomainResponse"
+                  "$ref": "#/components/schemas/ErrorResponse2"
                 }
               }
             }
@@ -1824,7 +3587,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nopts = {\n  limit: 56,\n  offset: 56\n}\nHelo::Domains.list(opts)"
+            "source": {
+              "$ref": "/tmp/samples/domain_list.ruby"
+            }
           }
         ]
       }
@@ -1834,6 +3599,7 @@
         "tags": [
           "Domains"
         ],
+        "description": "Update an existing Domain.",
         "operationId": "domain_update",
         "parameters": [
           {
@@ -1852,23 +3618,40 @@
               "schema": {
                 "$ref": "#/components/schemas/UpdateDomainRequest"
               }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateDomainRequest"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateDomainRequest"
-              }
             }
           },
           "required": true
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DomainResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse2"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse2"
+                }
+              }
+            }
           }
         },
         "summary": "Update a domain",
@@ -1876,7 +3659,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nupdate_domain_request = Helo::UpdateDomainRequest.new\nHelo::Domains.update(id, update_domain_request)"
+            "source": {
+              "$ref": "/tmp/samples/domain_update.ruby"
+            }
           }
         ]
       },
@@ -1884,6 +3669,7 @@
         "tags": [
           "Domains"
         ],
+        "description": "Retrieve an existing Domain.",
         "operationId": "domain_retrieve",
         "parameters": [
           {
@@ -1900,19 +3686,19 @@
           "200": {
             "description": "OK",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/DomainWithDnsResponse"
-                }
-              },
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DomainWithDnsResponse"
                 }
-              },
-              "text/json": {
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DomainWithDnsResponse"
+                  "$ref": "#/components/schemas/ErrorResponse2"
                 }
               }
             }
@@ -1923,7 +3709,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::Domains.retrieve(id)"
+            "source": {
+              "$ref": "/tmp/samples/domain_retrieve.ruby"
+            }
           }
         ]
       },
@@ -1931,6 +3719,7 @@
         "tags": [
           "Domains"
         ],
+        "description": "Delete an existing Domain.",
         "operationId": "domain_delete",
         "parameters": [
           {
@@ -1944,8 +3733,18 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse2"
+                }
+              }
+            }
           }
         },
         "summary": "Delete a domain",
@@ -1953,7 +3752,9 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::Domains.delete(id)"
+            "source": {
+              "$ref": "/tmp/samples/domain_delete.ruby"
+            }
           }
         ]
       }
@@ -1963,6 +3764,7 @@
         "tags": [
           "Domains"
         ],
+        "description": "Verify an existing Domain.",
         "operationId": "domain_verify",
         "parameters": [
           {
@@ -1979,19 +3781,19 @@
           "200": {
             "description": "OK",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/DnsRecordsResponse2"
-                }
-              },
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DnsRecordsResponse2"
                 }
-              },
-              "text/json": {
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DnsRecordsResponse2"
+                  "$ref": "#/components/schemas/ErrorResponse2"
                 }
               }
             }
@@ -2002,16 +3804,19 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::Domains.verify(id)"
+            "source": {
+              "$ref": "/tmp/samples/domain_verify.ruby"
+            }
           }
         ]
       }
     },
-    "/domains/{id}/rotate-domainkey": {
+    "/domains/{id}/rotate-key": {
       "post": {
         "tags": [
           "Domains"
         ],
+        "description": "Rotate an existing Domain's DKIM key.",
         "operationId": "domain_rotateKey",
         "parameters": [
           {
@@ -2028,19 +3833,29 @@
           "200": {
             "description": "OK",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/DnsRecordResponse2"
-                }
-              },
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DnsRecordResponse2"
                 }
-              },
-              "text/json": {
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DnsRecordResponse2"
+                  "$ref": "#/components/schemas/ErrorResponse2"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse2"
                 }
               }
             }
@@ -2051,7 +3866,138 @@
         "x-codeSamples": [
           {
             "lang": "ruby",
-            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::Domains.rotate_key(id)"
+            "source": {
+              "$ref": "/tmp/samples/domain_rotateKey.ruby"
+            }
+          }
+        ]
+      }
+    },
+    "/send/transactional": {
+      "post": {
+        "tags": [
+          "Sending"
+        ],
+        "operationId": "send_transactional",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SendResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SendResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSampleId": "send_transactional",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": {
+              "$ref": "/tmp/samples/send_transactional.ruby"
+            }
+          }
+        ]
+      }
+    },
+    "/send/transactional/batch": {
+      "post": {
+        "tags": [
+          "Sending"
+        ],
+        "operationId": "send_transactional_batch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SendResponse"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SendResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-codeSampleId": "send_transactional_batch",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": {
+              "$ref": "/tmp/samples/send_transactional_batch.ruby"
+            }
+          }
+        ]
+      }
+    },
+    "/send/broadcast": {
+      "post": {
+        "tags": [
+          "Sending"
+        ],
+        "operationId": "send_broadcast",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          }
+        },
+        "x-codeSampleId": "send_broadcast",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": {
+              "$ref": "/tmp/samples/send_broadcast.ruby"
+            }
           }
         ]
       }
@@ -2535,6 +4481,12 @@
           },
           "deliveryType": {
             "$ref": "#/components/schemas/DeliveryType"
+          },
+          "trackLinks": {
+            "type": "boolean"
+          },
+          "trackOpens": {
+            "type": "boolean"
           }
         }
       },
@@ -2588,6 +4540,14 @@
           }
         }
       },
+      "NullableOfDeliveryType": {
+        "enum": [
+          "live",
+          "blackhole",
+          "routed",
+          null
+        ]
+      },
       "PaginationResultOfChannelResponse": {
         "required": [
           "results",
@@ -2625,6 +4585,9 @@
         }
       },
       "CreateDomainRequest": {
+        "required": [
+          "name"
+        ],
         "type": "object",
         "properties": {
           "name": {
@@ -2635,8 +4598,7 @@
             "items": {
               "type": "string",
               "format": "uuid"
-            },
-            "nullable": true
+            }
           }
         }
       },
@@ -2689,7 +4651,11 @@
             "$ref": "#/components/schemas/DnsRecordResponse"
           },
           "returnPath": {
-            "$ref": "#/components/schemas/DnsRecordResponse"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DnsRecordResponse2"
+            },
+            "nullable": true
           },
           "tracking": {
             "$ref": "#/components/schemas/DnsRecordResponse"
@@ -2710,7 +4676,11 @@
             "$ref": "#/components/schemas/DnsRecordResponse"
           },
           "returnPath": {
-            "$ref": "#/components/schemas/DnsRecordResponse"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DnsRecordResponse2"
+            },
+            "nullable": true
           },
           "tracking": {
             "$ref": "#/components/schemas/DnsRecordResponse"
@@ -2722,16 +4692,16 @@
       },
       "DnsRecordStatus": {
         "enum": [
-          "Pending",
-          "Verified",
-          "Failing",
-          "Failed"
+          "pending",
+          "verified",
+          "failing",
+          "failed"
         ]
       },
       "DnsRecordType": {
         "enum": [
-          "TXT",
-          "CNAME"
+          "txt",
+          "cname"
         ]
       },
       "DomainResponse": {
@@ -2754,18 +4724,6 @@
           },
           "verified": {
             "type": "boolean"
-          },
-          "returnPathDomain": {
-            "type": "string",
-            "nullable": true
-          },
-          "trackingDomain": {
-            "type": "string",
-            "nullable": true
-          },
-          "unsubscribeDomain": {
-            "type": "string",
-            "nullable": true
           },
           "channels": {
             "type": "array",
@@ -2798,18 +4756,6 @@
           "verified": {
             "type": "boolean"
           },
-          "returnPathDomain": {
-            "type": "string",
-            "nullable": true
-          },
-          "trackingDomain": {
-            "type": "string",
-            "nullable": true
-          },
-          "unsubscribeDomain": {
-            "type": "string",
-            "nullable": true
-          },
           "channels": {
             "type": "array",
             "items": {
@@ -2820,6 +4766,49 @@
           },
           "dnsRecords": {
             "$ref": "#/components/schemas/DnsRecordsResponse"
+          }
+        }
+      },
+      "ErrorResponse2": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "requestId": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "nullable": true
           }
         }
       },
@@ -2850,6 +4839,38 @@
             "items": {
               "type": "string",
               "format": "uuid"
+            }
+          }
+        }
+      },
+      "SendRequest": {},
+      "SendResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "messageId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "errorCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "suppressions": {
+            "type": "array",
+            "items": {
+              "type": "string"
             },
             "nullable": true
           }
