@@ -874,13 +874,6 @@
         "tags": [
           "Statistics"
         ],
-        "detail": {
-          "security": [
-            {
-              "bearerAuth": []
-            }
-          ]
-        },
         "x-codeSampleId": "statistics_retrieveHourly",
         "x-codeSamples": [
           {
@@ -1499,13 +1492,6 @@
         "tags": [
           "Statistics"
         ],
-        "detail": {
-          "security": [
-            {
-              "bearerAuth": []
-            }
-          ]
-        },
         "x-codeSampleId": "statistics_retrieveDaily",
         "x-codeSamples": [
           {
@@ -1826,13 +1812,6 @@
         "tags": [
           "Statistics"
         ],
-        "detail": {
-          "security": [
-            {
-              "bearerAuth": []
-            }
-          ]
-        },
         "x-codeSampleId": "statistics_retrieveTotals",
         "x-codeSamples": [
           {
