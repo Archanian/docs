@@ -280,22 +280,8 @@
         "parameters": [
           {
             "schema": {
-              "anyOf": [
-                {
-                  "type": "Date"
-                },
-                {
-                  "format": "date-time",
-                  "type": "string"
-                },
-                {
-                  "format": "date",
-                  "type": "string"
-                },
-                {
-                  "type": "number"
-                }
-              ]
+              "format": "date-time",
+              "type": "string"
             },
             "in": "query",
             "name": "from",
@@ -303,22 +289,8 @@
           },
           {
             "schema": {
-              "anyOf": [
-                {
-                  "type": "Date"
-                },
-                {
-                  "format": "date-time",
-                  "type": "string"
-                },
-                {
-                  "format": "date",
-                  "type": "string"
-                },
-                {
-                  "type": "number"
-                }
-              ]
+              "format": "date-time",
+              "type": "string"
             },
             "in": "query",
             "name": "to",
@@ -344,256 +316,7 @@
         ],
         "responses": {
           "200": {
-            "items": {
-              "type": "object",
-              "properties": {
-                "timestamp": {
-                  "anyOf": [
-                    {
-                      "type": "Date"
-                    },
-                    {
-                      "format": "date-time",
-                      "type": "string"
-                    },
-                    {
-                      "format": "date",
-                      "type": "string"
-                    },
-                    {
-                      "type": "number"
-                    }
-                  ]
-                },
-                "transactional": {
-                  "type": "object",
-                  "properties": {
-                    "accepted": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "processed": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "delivered": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "opened": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "clicked": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "bounced": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "unsubscribed": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "complained": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    }
-                  },
-                  "required": [
-                    "accepted",
-                    "processed",
-                    "delivered",
-                    "opened",
-                    "clicked",
-                    "bounced",
-                    "unsubscribed",
-                    "complained"
-                  ]
-                },
-                "broadcast": {
-                  "type": "object",
-                  "properties": {
-                    "accepted": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "processed": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "delivered": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "opened": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "clicked": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "bounced": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "unsubscribed": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "complained": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    }
-                  },
-                  "required": [
-                    "accepted",
-                    "processed",
-                    "delivered",
-                    "opened",
-                    "clicked",
-                    "bounced",
-                    "unsubscribed",
-                    "complained"
-                  ]
-                }
-              },
-              "required": [
-                "timestamp",
-                "transactional",
-                "broadcast"
-              ]
-            },
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -602,121 +325,35 @@
                     "type": "object",
                     "properties": {
                       "timestamp": {
-                        "anyOf": [
-                          {
-                            "type": "Date"
-                          },
-                          {
-                            "format": "date-time",
-                            "type": "string"
-                          },
-                          {
-                            "format": "date",
-                            "type": "string"
-                          },
-                          {
-                            "type": "number"
-                          }
-                        ]
+                        "format": "date-time",
+                        "type": "string"
                       },
                       "transactional": {
                         "type": "object",
                         "properties": {
                           "accepted": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "processed": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "delivered": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "opened": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "clicked": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "bounced": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "unsubscribed": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "complained": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           }
                         },
                         "required": [
@@ -734,100 +371,28 @@
                         "type": "object",
                         "properties": {
                           "accepted": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "processed": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "delivered": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "opened": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "clicked": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "bounced": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "unsubscribed": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "complained": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           }
                         },
                         "required": [
@@ -853,6 +418,7 @@
             }
           },
           "422": {
+            "description": "Validation failed",
             "content": {
               "application/json": {
                 "schema": {
@@ -890,22 +456,8 @@
         "parameters": [
           {
             "schema": {
-              "anyOf": [
-                {
-                  "type": "Date"
-                },
-                {
-                  "format": "date-time",
-                  "type": "string"
-                },
-                {
-                  "format": "date",
-                  "type": "string"
-                },
-                {
-                  "type": "number"
-                }
-              ]
+              "format": "date-time",
+              "type": "string"
             },
             "in": "query",
             "name": "from",
@@ -913,22 +465,8 @@
           },
           {
             "schema": {
-              "anyOf": [
-                {
-                  "type": "Date"
-                },
-                {
-                  "format": "date-time",
-                  "type": "string"
-                },
-                {
-                  "format": "date",
-                  "type": "string"
-                },
-                {
-                  "type": "number"
-                }
-              ]
+              "format": "date-time",
+              "type": "string"
             },
             "in": "query",
             "name": "to",
@@ -962,256 +500,7 @@
         ],
         "responses": {
           "200": {
-            "items": {
-              "type": "object",
-              "properties": {
-                "timestamp": {
-                  "anyOf": [
-                    {
-                      "type": "Date"
-                    },
-                    {
-                      "format": "date-time",
-                      "type": "string"
-                    },
-                    {
-                      "format": "date",
-                      "type": "string"
-                    },
-                    {
-                      "type": "number"
-                    }
-                  ]
-                },
-                "transactional": {
-                  "type": "object",
-                  "properties": {
-                    "accepted": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "processed": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "delivered": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "opened": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "clicked": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "bounced": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "unsubscribed": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "complained": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    }
-                  },
-                  "required": [
-                    "accepted",
-                    "processed",
-                    "delivered",
-                    "opened",
-                    "clicked",
-                    "bounced",
-                    "unsubscribed",
-                    "complained"
-                  ]
-                },
-                "broadcast": {
-                  "type": "object",
-                  "properties": {
-                    "accepted": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "processed": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "delivered": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "opened": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "clicked": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "bounced": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "unsubscribed": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    },
-                    "complained": {
-                      "anyOf": [
-                        {
-                          "format": "integer",
-                          "default": 0,
-                          "type": "string"
-                        },
-                        {
-                          "type": "integer"
-                        }
-                      ]
-                    }
-                  },
-                  "required": [
-                    "accepted",
-                    "processed",
-                    "delivered",
-                    "opened",
-                    "clicked",
-                    "bounced",
-                    "unsubscribed",
-                    "complained"
-                  ]
-                }
-              },
-              "required": [
-                "timestamp",
-                "transactional",
-                "broadcast"
-              ]
-            },
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -1220,121 +509,35 @@
                     "type": "object",
                     "properties": {
                       "timestamp": {
-                        "anyOf": [
-                          {
-                            "type": "Date"
-                          },
-                          {
-                            "format": "date-time",
-                            "type": "string"
-                          },
-                          {
-                            "format": "date",
-                            "type": "string"
-                          },
-                          {
-                            "type": "number"
-                          }
-                        ]
+                        "format": "date-time",
+                        "type": "string"
                       },
                       "transactional": {
                         "type": "object",
                         "properties": {
                           "accepted": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "processed": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "delivered": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "opened": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "clicked": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "bounced": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "unsubscribed": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "complained": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           }
                         },
                         "required": [
@@ -1352,100 +555,28 @@
                         "type": "object",
                         "properties": {
                           "accepted": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "processed": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "delivered": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "opened": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "clicked": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "bounced": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "unsubscribed": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           },
                           "complained": {
-                            "anyOf": [
-                              {
-                                "format": "integer",
-                                "default": 0,
-                                "type": "string"
-                              },
-                              {
-                                "type": "integer"
-                              }
-                            ]
+                            "type": "integer"
                           }
                         },
                         "required": [
@@ -1471,6 +602,7 @@
             }
           },
           "422": {
+            "description": "Validation failed",
             "content": {
               "application/json": {
                 "schema": {
@@ -1508,22 +640,8 @@
         "parameters": [
           {
             "schema": {
-              "anyOf": [
-                {
-                  "type": "Date"
-                },
-                {
-                  "format": "date-time",
-                  "type": "string"
-                },
-                {
-                  "format": "date",
-                  "type": "string"
-                },
-                {
-                  "type": "number"
-                }
-              ]
+              "format": "date-time",
+              "type": "string"
             },
             "in": "query",
             "name": "from",
@@ -1531,22 +649,8 @@
           },
           {
             "schema": {
-              "anyOf": [
-                {
-                  "type": "Date"
-                },
-                {
-                  "format": "date-time",
-                  "type": "string"
-                },
-                {
-                  "format": "date",
-                  "type": "string"
-                },
-                {
-                  "type": "number"
-                }
-              ]
+              "format": "date-time",
+              "type": "string"
             },
             "in": "query",
             "name": "to",
@@ -1571,6 +675,7 @@
         ],
         "responses": {
           "200": {
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -1580,100 +685,28 @@
                       "type": "object",
                       "properties": {
                         "accepted": {
-                          "anyOf": [
-                            {
-                              "format": "integer",
-                              "default": 0,
-                              "type": "string"
-                            },
-                            {
-                              "type": "integer"
-                            }
-                          ]
+                          "type": "integer"
                         },
                         "processed": {
-                          "anyOf": [
-                            {
-                              "format": "integer",
-                              "default": 0,
-                              "type": "string"
-                            },
-                            {
-                              "type": "integer"
-                            }
-                          ]
+                          "type": "integer"
                         },
                         "delivered": {
-                          "anyOf": [
-                            {
-                              "format": "integer",
-                              "default": 0,
-                              "type": "string"
-                            },
-                            {
-                              "type": "integer"
-                            }
-                          ]
+                          "type": "integer"
                         },
                         "opened": {
-                          "anyOf": [
-                            {
-                              "format": "integer",
-                              "default": 0,
-                              "type": "string"
-                            },
-                            {
-                              "type": "integer"
-                            }
-                          ]
+                          "type": "integer"
                         },
                         "clicked": {
-                          "anyOf": [
-                            {
-                              "format": "integer",
-                              "default": 0,
-                              "type": "string"
-                            },
-                            {
-                              "type": "integer"
-                            }
-                          ]
+                          "type": "integer"
                         },
                         "bounced": {
-                          "anyOf": [
-                            {
-                              "format": "integer",
-                              "default": 0,
-                              "type": "string"
-                            },
-                            {
-                              "type": "integer"
-                            }
-                          ]
+                          "type": "integer"
                         },
                         "unsubscribed": {
-                          "anyOf": [
-                            {
-                              "format": "integer",
-                              "default": 0,
-                              "type": "string"
-                            },
-                            {
-                              "type": "integer"
-                            }
-                          ]
+                          "type": "integer"
                         },
                         "complained": {
-                          "anyOf": [
-                            {
-                              "format": "integer",
-                              "default": 0,
-                              "type": "string"
-                            },
-                            {
-                              "type": "integer"
-                            }
-                          ]
+                          "type": "integer"
                         }
                       },
                       "required": [
@@ -1691,100 +724,28 @@
                       "type": "object",
                       "properties": {
                         "accepted": {
-                          "anyOf": [
-                            {
-                              "format": "integer",
-                              "default": 0,
-                              "type": "string"
-                            },
-                            {
-                              "type": "integer"
-                            }
-                          ]
+                          "type": "integer"
                         },
                         "processed": {
-                          "anyOf": [
-                            {
-                              "format": "integer",
-                              "default": 0,
-                              "type": "string"
-                            },
-                            {
-                              "type": "integer"
-                            }
-                          ]
+                          "type": "integer"
                         },
                         "delivered": {
-                          "anyOf": [
-                            {
-                              "format": "integer",
-                              "default": 0,
-                              "type": "string"
-                            },
-                            {
-                              "type": "integer"
-                            }
-                          ]
+                          "type": "integer"
                         },
                         "opened": {
-                          "anyOf": [
-                            {
-                              "format": "integer",
-                              "default": 0,
-                              "type": "string"
-                            },
-                            {
-                              "type": "integer"
-                            }
-                          ]
+                          "type": "integer"
                         },
                         "clicked": {
-                          "anyOf": [
-                            {
-                              "format": "integer",
-                              "default": 0,
-                              "type": "string"
-                            },
-                            {
-                              "type": "integer"
-                            }
-                          ]
+                          "type": "integer"
                         },
                         "bounced": {
-                          "anyOf": [
-                            {
-                              "format": "integer",
-                              "default": 0,
-                              "type": "string"
-                            },
-                            {
-                              "type": "integer"
-                            }
-                          ]
+                          "type": "integer"
                         },
                         "unsubscribed": {
-                          "anyOf": [
-                            {
-                              "format": "integer",
-                              "default": 0,
-                              "type": "string"
-                            },
-                            {
-                              "type": "integer"
-                            }
-                          ]
+                          "type": "integer"
                         },
                         "complained": {
-                          "anyOf": [
-                            {
-                              "format": "integer",
-                              "default": 0,
-                              "type": "string"
-                            },
-                            {
-                              "type": "integer"
-                            }
-                          ]
+                          "type": "integer"
                         }
                       },
                       "required": [
