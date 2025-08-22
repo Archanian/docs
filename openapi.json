@@ -263,16 +263,7 @@
         "tags": [
           "ActivityEvents"
         ],
-        "summary": "List all activity events",
-        "x-codeSampleId": "activityEvents_list",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/activityEvents_list.ruby"
-            }
-          }
-        ]
+        "summary": "List all activity events"
       }
     },
     "/activity/statistics/hourly": {
@@ -439,15 +430,6 @@
         "operationId": "statistics_retrieveHourly",
         "tags": [
           "Statistics"
-        ],
-        "x-codeSampleId": "statistics_retrieveHourly",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/statistics_retrieveHourly.ruby"
-            }
-          }
         ]
       }
     },
@@ -623,15 +605,6 @@
         "operationId": "statistics_retrieveDaily",
         "tags": [
           "Statistics"
-        ],
-        "x-codeSampleId": "statistics_retrieveDaily",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/statistics_retrieveDaily.ruby"
-            }
-          }
         ]
       }
     },
@@ -772,15 +745,6 @@
         "operationId": "statistics_retrieveTotals",
         "tags": [
           "Statistics"
-        ],
-        "x-codeSampleId": "statistics_retrieveTotals",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/statistics_retrieveTotals.ruby"
-            }
-          }
         ]
       }
     },
@@ -845,16 +809,7 @@
             }
           }
         },
-        "summary": "Create an API credential",
-        "x-codeSampleId": "apiCredential_create",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/apiCredential_create.ruby"
-            }
-          }
-        ]
+        "summary": "Create an API credential"
       },
       "get": {
         "tags": [
@@ -939,16 +894,7 @@
             }
           }
         },
-        "summary": "List all API credentials",
-        "x-codeSampleId": "apiCredential_list",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/apiCredential_list.ruby"
-            }
-          }
-        ]
+        "summary": "List all API credentials"
       }
     },
     "/api-credentials/{id}": {
@@ -1023,16 +969,7 @@
             }
           }
         },
-        "summary": "Update an API credential",
-        "x-codeSampleId": "apiCredential_update",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/apiCredential_update.ruby"
-            }
-          }
-        ]
+        "summary": "Update an API credential"
       },
       "get": {
         "tags": [
@@ -1095,16 +1032,7 @@
             }
           }
         },
-        "summary": "Retrieve an API credential",
-        "x-codeSampleId": "apiCredential_retrieve",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/apiCredential_retrieve.ruby"
-            }
-          }
-        ]
+        "summary": "Retrieve an API credential"
       },
       "delete": {
         "tags": [
@@ -1160,16 +1088,7 @@
             }
           }
         },
-        "summary": "Delete an API credential",
-        "x-codeSampleId": "apiCredential_delete",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/apiCredential_delete.ruby"
-            }
-          }
-        ]
+        "summary": "Delete an API credential"
       }
     },
     "/users": {
@@ -1233,16 +1152,7 @@
             }
           }
         },
-        "summary": "Create a user",
-        "x-codeSampleId": "user_create",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/user_create.ruby"
-            }
-          }
-        ]
+        "summary": "Create a user"
       },
       "get": {
         "tags": [
@@ -1333,16 +1243,7 @@
             }
           }
         },
-        "summary": "List all users",
-        "x-codeSampleId": "user_list",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/user_list.ruby"
-            }
-          }
-        ]
+        "summary": "List all users"
       }
     },
     "/users/{id}": {
@@ -1417,16 +1318,7 @@
             }
           }
         },
-        "summary": "Update a user",
-        "x-codeSampleId": "user_update",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/user_update.ruby"
-            }
-          }
-        ]
+        "summary": "Update a user"
       },
       "get": {
         "tags": [
@@ -1489,16 +1381,7 @@
             }
           }
         },
-        "summary": "Retrieve a user",
-        "x-codeSampleId": "user_retrieve",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/user_retrieve.ruby"
-            }
-          }
-        ]
+        "summary": "Retrieve a user"
       },
       "delete": {
         "tags": [
@@ -1554,16 +1437,7 @@
             }
           }
         },
-        "summary": "Delete a user",
-        "x-codeSampleId": "user_delete",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/user_delete.ruby"
-            }
-          }
-        ]
+        "summary": "Delete a user"
       }
     },
     "/channels/{channelId}/smtp-users": {
@@ -1638,16 +1512,7 @@
             }
           }
         },
-        "summary": "Create an SMTP user",
-        "x-codeSampleId": "smtpUser_create",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/smtpUser_create.ruby"
-            }
-          }
-        ]
+        "summary": "Create an SMTP user"
       },
       "get": {
         "tags": [
@@ -1733,16 +1598,7 @@
             }
           }
         },
-        "summary": "List all SMTP users",
-        "x-codeSampleId": "smtpUser_list",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/smtpUser_list.ruby"
-            }
-          }
-        ]
+        "summary": "List all SMTP users"
       }
     },
     "/channels/{channelId}/smtp-users/{id}": {
@@ -1826,16 +1682,7 @@
             }
           }
         },
-        "summary": "Update an SMTP user",
-        "x-codeSampleId": "smtpUser_update",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/smtpUser_update.ruby"
-            }
-          }
-        ]
+        "summary": "Update an SMTP user"
       },
       "get": {
         "tags": [
@@ -1907,16 +1754,7 @@
             }
           }
         },
-        "summary": "Retrieve an SMTP user",
-        "x-codeSampleId": "smtpUser_retrieve",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/smtpUser_retrieve.ruby"
-            }
-          }
-        ]
+        "summary": "Retrieve an SMTP user"
       },
       "delete": {
         "tags": [
@@ -1981,16 +1819,7 @@
             }
           }
         },
-        "summary": "Delete an SMTP user",
-        "x-codeSampleId": "smtpUser_delete",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/smtpUser_delete.ruby"
-            }
-          }
-        ]
+        "summary": "Delete an SMTP user"
       }
     },
     "/channels": {
@@ -2055,16 +1884,7 @@
             }
           }
         },
-        "summary": "Create a channel",
-        "x-codeSampleId": "channel_create",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/channel_create.ruby"
-            }
-          }
-        ]
+        "summary": "Create a channel"
       },
       "get": {
         "tags": [
@@ -2161,16 +1981,7 @@
             }
           }
         },
-        "summary": "List all channels",
-        "x-codeSampleId": "channel_list",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/channel_list.ruby"
-            }
-          }
-        ]
+        "summary": "List all channels"
       }
     },
     "/channels/{id}": {
@@ -2256,16 +2067,7 @@
             }
           }
         },
-        "summary": "Update a channel",
-        "x-codeSampleId": "channel_update",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/channel_update.ruby"
-            }
-          }
-        ]
+        "summary": "Update a channel"
       },
       "get": {
         "tags": [
@@ -2329,16 +2131,7 @@
             }
           }
         },
-        "summary": "Retrieve a channel",
-        "x-codeSampleId": "channel_retrieve",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/channel_retrieve.ruby"
-            }
-          }
-        ]
+        "summary": "Retrieve a channel"
       },
       "delete": {
         "tags": [
@@ -2395,16 +2188,7 @@
             }
           }
         },
-        "summary": "Delete a channel",
-        "x-codeSampleId": "channel_delete",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/channel_delete.ruby"
-            }
-          }
-        ]
+        "summary": "Delete a channel"
       }
     },
     "/domains": {
@@ -2446,16 +2230,7 @@
             }
           }
         },
-        "summary": "Create a domain",
-        "x-codeSampleId": "domain_create",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/domain_create.ruby"
-            }
-          }
-        ]
+        "summary": "Create a domain"
       },
       "get": {
         "tags": [
@@ -2522,16 +2297,7 @@
             }
           }
         },
-        "summary": "List all domains",
-        "x-codeSampleId": "domain_list",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/domain_list.ruby"
-            }
-          }
-        ]
+        "summary": "List all domains"
       }
     },
     "/domains/{id}": {
@@ -2594,16 +2360,7 @@
             }
           }
         },
-        "summary": "Update a domain",
-        "x-codeSampleId": "domain_update",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/domain_update.ruby"
-            }
-          }
-        ]
+        "summary": "Update a domain"
       },
       "get": {
         "tags": [
@@ -2644,16 +2401,7 @@
             }
           }
         },
-        "summary": "Retrieve a domain",
-        "x-codeSampleId": "domain_retrieve",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/domain_retrieve.ruby"
-            }
-          }
-        ]
+        "summary": "Retrieve a domain"
       },
       "delete": {
         "tags": [
@@ -2687,16 +2435,7 @@
             }
           }
         },
-        "summary": "Delete a domain",
-        "x-codeSampleId": "domain_delete",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/domain_delete.ruby"
-            }
-          }
-        ]
+        "summary": "Delete a domain"
       }
     },
     "/domains/{id}/verify": {
@@ -2739,16 +2478,7 @@
             }
           }
         },
-        "summary": "Verify a domain",
-        "x-codeSampleId": "domain_verify",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/domain_verify.ruby"
-            }
-          }
-        ]
+        "summary": "Verify a domain"
       }
     },
     "/domains/{id}/rotate-key": {
@@ -2801,16 +2531,7 @@
             }
           }
         },
-        "summary": "Rotate a domain key",
-        "x-codeSampleId": "domain_rotateKey",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/domain_rotateKey.ruby"
-            }
-          }
-        ]
+        "summary": "Rotate a domain key"
       }
     },
     "/send/transactional": {
@@ -2850,16 +2571,7 @@
               }
             }
           }
-        },
-        "x-codeSampleId": "send_transactional",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/send_transactional.ruby"
-            }
-          }
-        ]
+        }
       }
     },
     "/send/transactional/batch": {
@@ -2905,16 +2617,7 @@
               }
             }
           }
-        },
-        "x-codeSampleId": "send_transactional_batch",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/send_transactional_batch.ruby"
-            }
-          }
-        ]
+        }
       }
     },
     "/send/broadcast": {
@@ -2930,16 +2633,7 @@
           "422": {
             "description": "Unprocessable Entity"
           }
-        },
-        "x-codeSampleId": "send_broadcast",
-        "x-codeSamples": [
-          {
-            "lang": "ruby",
-            "source": {
-              "$ref": "/tmp/samples/send_broadcast.ruby"
-            }
-          }
-        ]
+        }
       }
     }
   },
